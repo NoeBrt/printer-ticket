@@ -29,7 +29,7 @@ if [[ "${1:-}" == "schedule" ]]; then
   esac
   exit
 fi
-args=(--bluetooth "${PRINTER_NAME:-YHK-1536}" --printer-model instaprint_ctp500_coreprint)
+args=(--bluetooth "${PRINTER_NAME:-YHK-1536}" --printer-model "${PRINTER_MODEL:-instaprint_ctp500_coreprint}")
 if [[ "${1:-}" == "--qr" ]]; then
   shift; caption=""
   if [[ "${1:-}" == "--caption" ]]; then caption="${2:-}"; shift 2; fi

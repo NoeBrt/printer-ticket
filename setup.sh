@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # setup.sh: install print-ticket on Linux (BlueZ), pair the printer, install the Claude Code skill, print a test.
 # Safe to re-run: every step is skipped when already done, so it doubles as a health check.
-# Settings: TIMINI_DIR (default ~/TiMini-Print), PRINTER_NAME (default YHK-1536).
+# Settings: TIMINI_DIR (default ~/TiMini-Print), PRINTER_NAME (default YHK-1536), PRINTER_MODEL (TiMini model key).
 set -euo pipefail
 HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 TIMINI_DIR="${TIMINI_DIR:-$HOME/TiMini-Print}"
