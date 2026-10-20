@@ -1,9 +1,9 @@
 ---
-name: mini-thermal-printer
-description: Print QR codes, text labels, images or PDFs on the user's mini thermal sticker printer (Printel X6 / CTP-500 family, Bluetooth name YHK-1536, 48 mm roll; also called pocket printer or cat printer). Use when the user asks to print a label, sticker, ticket, QR code, note or picture on "my printer", "the sticker printer", "the thermal printer" or "the X6", including in French ("imprime", "imprimante", "ticket", "étiquette", "sticker", "code QR").
+name: thermal-printer
+description: Print QR codes, text labels, images or PDFs on the user's thermal sticker printer (Printel X6 / CTP-500 family, Bluetooth name YHK-1536, 48 mm roll; also called pocket printer or cat printer). Use when the user asks to print a label, sticker, ticket, QR code, note or picture on "my printer", "the sticker printer", "the thermal printer" or "the X6", including in French ("imprime", "imprimante", "ticket", "étiquette", "sticker", "code QR").
 ---
 
-# Mini thermal printer (Printel X6 and CTP-500 family)
+# Thermal printer (Printel X6 and CTP-500 family)
 
 The printer is a YHK-class pocket thermal printer (sold as Printel X6): 384 dots (48 mm) wide, 203 dpi, black only.
 It is paired with a Linux machine that prints through `print-ticket`, a wrapper around the open source TiMini Print
@@ -19,8 +19,8 @@ If `print-ticket` is missing or a print fails, run the setup (safe to re-run; it
 the printer, installs this skill and prints a test sticker):
 
 ```sh
-git clone https://github.com/NoeBrt/mini-thermal-printer-skill ~/mini-thermal-printer-skill   # once
-~/mini-thermal-printer-skill/setup.sh                                                  # PRINTER_NAME=... if not YHK-1536
+git clone https://github.com/NoeBrt/thermal-printer-skill ~/thermal-printer-skill   # once
+~/thermal-printer-skill/setup.sh                                                  # PRINTER_NAME=... if not YHK-1536
 ```
 
 ## Print
