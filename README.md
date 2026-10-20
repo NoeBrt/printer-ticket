@@ -9,11 +9,11 @@ Built and tested on the **X6** (sold as Printel, Mafiti, Nadra…, app "Tiny Pri
 the **Core Innovations CTP-500**; see [supported printers](#supported-printers).
 
 <p align="center">
-  <img src="examples/printer.jpg" width="420" alt="Pocket thermal printer with a QR sticker coming out">
+  <img src="examples/printer.jpg" width="380" alt="The X6 thermal printer with a QR sticker coming out">
   &nbsp;&nbsp;
   <img src="examples/qr-example.png" width="200" alt="QR sticker as rendered for the 384-dot head">
 </p>
-<p align="center"><sub>Left: illustration (generated image). Right: what <code>print-ticket --qr --caption thermal-printer</code> sends to the printer.</sub></p>
+<p align="center"><sub>Left: the X6 used to build this skill (photo; the sticker was edited to show the example QR). Right: what <code>print-ticket --qr --caption thermal-printer</code> sends to the printer.</sub></p>
 
 ## In 10 seconds
 
