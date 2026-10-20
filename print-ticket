@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# print-ticket: print on a YHK pocket thermal printer (sold as Printel X6) paired with this Linux machine, through
+# TiMini Print (https://github.com/Dejniel/TiMini-Print) with the CTP-500 profile this printer needs.
+#   print-ticket photo.png | label.pdf | note.txt
+#   print-ticket --text "Shelf B"
+#   echo "https://example.com" | print-ticket --qr --caption example.com   (QR content on stdin)
+#   some-command-producing-a-png | print-ticket -                        (image on stdin, e.g. over ssh)
+# Extra TiMini options pass through, e.g. --darkness 4 or --verbose.
+set -euo pipefail
+HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+TIMINI_DIR="${TIMINI_DIR:-$HOME/TiMini-Print}"
+export TIMINIPRINT_NO_UPDATE_CHECK=1
+args=(--bluetooth "${PRINTER_NAME:-YHK-1536}" --printer-model instaprint_ctp500_coreprint)
+if [[ "${1:-}" == "--qr" ]]; then
+  shift; caption=""
+  if [[ "${1:-}" == "--caption" ]]; then caption="${2:-}"; shift 2; fi
+  tmp=$(mktemp --suffix=.png); trap 'rm -f "$tmp"' EXIT     # mode 0600; the QR may hold a secret
+  "$TIMINI_DIR/.venv/bin/python" "$HERE/render-qr.py" "$tmp" "$caption"
+  timeout 180 "$TIMINI_DIR/.venv/bin/python" "$TIMINI_DIR/timiniprint_command_line.py" "${args[@]}" --image-mode threshold "$@" "$tmp"
+  exit
+fi
+if [[ "${1:-}" == "-" ]]; then
+  shift
+  tmp=$(mktemp --suffix=.png); trap 'rm -f "$tmp"' EXIT
+  cat > "$tmp"
+  set -- "$tmp" "$@"
+fi
+case "${1:-}" in *.png|*.jpg|*.jpeg|*.PNG|*.JPG|*.JPEG) args+=(--image-mode floyd_steinberg) ;; esac
+timeout 180 "$TIMINI_DIR/.venv/bin/python" "$TIMINI_DIR/timiniprint_command_line.py" "${args[@]}" "$@"
