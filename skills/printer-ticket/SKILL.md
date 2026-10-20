@@ -13,6 +13,16 @@ over BLE this printer feeds paper without printing.
 If the printer is paired with another machine, run every command below through `ssh <host> '...'` and send files on
 stdin (`print-ticket -` for images) or with `scp` first.
 
+## Setup
+
+If `print-ticket` is missing or a print fails, run the setup (safe to re-run; it checks every step, finds and pairs
+the printer, installs this skill and prints a test sticker):
+
+```sh
+git clone https://github.com/NoeBrt/printer-ticket ~/printer-ticket   # once
+~/printer-ticket/setup.sh                                            # PRINTER_NAME=... if not YHK-1536
+```
+
 ## Print
 
 ```sh
@@ -20,7 +30,18 @@ print-ticket --text "Shelf B · batteries"
 print-ticket photo.png                                              # images are dithered automatically
 print-ticket label.pdf
 echo "https://example.com" | print-ticket --qr --caption "Example"  # QR content always on stdin
+some-command | print-ticket -                                       # image, PDF or text on stdin, detected
 ```
+
+## Regular prints
+
+```sh
+print-ticket schedule "0 8 * * 1-5" 'date "+%A %d %B" | print-ticket -'   # cron syntax, then any shell command
+print-ticket schedule list
+print-ticket schedule remove 1
+```
+
+Output goes to `~/.cache/print-ticket.log`. Confirm the schedule with the user before adding it: it prints unattended.
 
 TiMini options pass through, e.g. `--darkness 1-5`, `--verbose`. Nothing reports success from the paper: tell the
 user what was sent and ask them to look at the sticker.

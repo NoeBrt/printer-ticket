@@ -4,12 +4,31 @@
 #   print-ticket photo.png | label.pdf | note.txt
 #   print-ticket --text "Shelf B"
 #   echo "https://example.com" | print-ticket --qr --caption example.com   (QR content on stdin)
-#   some-command-producing-a-png | print-ticket -                        (image on stdin, e.g. over ssh)
+#   anything | print-ticket -                       (image, PDF or text on stdin, detected; e.g. over ssh)
+#   print-ticket schedule "0 8 * * 1-5" 'date "+%A %d %B" | print-ticket -'   (cron; also: schedule list|remove N)
 # Extra TiMini options pass through, e.g. --darkness 4 or --verbose.
 set -euo pipefail
 HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 TIMINI_DIR="${TIMINI_DIR:-$HOME/TiMini-Print}"
 export TIMINIPRINT_NO_UPDATE_CHECK=1
+if [[ "${1:-}" == "schedule" ]]; then
+  tag="# print-ticket schedule"
+  shift
+  case "${1:-list}" in
+    list)
+      crontab -l 2>/dev/null | grep -F -- "$tag" | sed -E "s/export PATH=[^;]*; \(//; s/\) >> .*//; s/\\\\%/%/g" | cat -n ;;
+    remove)
+      [[ "${2:-}" =~ ^[0-9]+$ ]] || { echo "usage: print-ticket schedule remove N   (N from schedule list)"; exit 2; }
+      crontab -l | awk -v n="$2" -v t="$tag" 'index($0, t) { if (++i == n) next } 1' | crontab - ;;
+    *)
+      [[ $# -eq 2 ]] || { echo 'usage: print-ticket schedule "MIN HOUR DAY MONTH WEEKDAY" "COMMAND"'; exit 2; }
+      mkdir -p "$HOME/.cache"
+      cmd="export PATH=\"$HOME/.local/bin:\$PATH\"; ($2) >> \"$HOME/.cache/print-ticket.log\" 2>&1"
+      (crontab -l 2>/dev/null || true; echo "$1 ${cmd//%/\\%} $tag") | crontab -    # cron reads % as newline
+      echo "scheduled; log: ~/.cache/print-ticket.log" ;;
+  esac
+  exit
+fi
 args=(--bluetooth "${PRINTER_NAME:-YHK-1536}" --printer-model instaprint_ctp500_coreprint)
 if [[ "${1:-}" == "--qr" ]]; then
   shift; caption=""
@@ -21,9 +40,13 @@ if [[ "${1:-}" == "--qr" ]]; then
 fi
 if [[ "${1:-}" == "-" ]]; then
   shift
-  tmp=$(mktemp --suffix=.png); trap 'rm -f "$tmp"' EXIT
+  tmp=$(mktemp); trap 'rm -f "$tmp" "$tmp".*' EXIT    # mode 0600; the content may be a secret
   cat > "$tmp"
-  set -- "$tmp" "$@"
+  case "$(file -b --mime-type "$tmp")" in
+    image/png) ext=png ;; image/jpeg) ext=jpg ;; application/pdf) ext=pdf ;; *) ext=txt ;;
+  esac
+  mv "$tmp" "$tmp.$ext"
+  set -- "$tmp.$ext" "$@"
 fi
 case "${1:-}" in *.png|*.jpg|*.jpeg|*.PNG|*.JPG|*.JPEG) args+=(--image-mode floyd_steinberg) ;; esac
 timeout 180 "$TIMINI_DIR/.venv/bin/python" "$TIMINI_DIR/timiniprint_command_line.py" "${args[@]}" "$@"
