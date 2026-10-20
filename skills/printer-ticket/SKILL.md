@@ -1,6 +1,6 @@
 ---
 name: printer-ticket
-description: Claude Code skill. Print QR codes, text labels, images or PDFs on the user's YHK pocket thermal sticker printer (Printel X6, Bluetooth name YHK-1536, 48 mm roll). Use when the user asks to print a label, sticker, ticket, QR code, note or picture on "my printer", "the sticker printer" or "the X6", including in French ("imprime", "imprimante", "ticket", "étiquette", "sticker", "code QR").
+description: Print QR codes, text labels, images or PDFs on the user's YHK pocket thermal sticker printer (Printel X6, Bluetooth name YHK-1536, 48 mm roll). Use when the user asks to print a label, sticker, ticket, QR code, note or picture on "my printer", "the sticker printer" or "the X6", including in French ("imprime", "imprimante", "ticket", "étiquette", "sticker", "code QR").
 ---
 
 # Printer ticket (YHK pocket printer)
@@ -19,8 +19,8 @@ If `print-ticket` is missing or a print fails, run the setup (safe to re-run; it
 the printer, installs this skill and prints a test sticker):
 
 ```sh
-git clone https://github.com/NoeBrt/printer-ticket ~/printer-ticket   # once
-~/printer-ticket/setup.sh                                            # PRINTER_NAME=... if not YHK-1536
+git clone https://github.com/NoeBrt/printer-ticket-skill ~/printer-ticket-skill   # once
+~/printer-ticket-skill/setup.sh                                                  # PRINTER_NAME=... if not YHK-1536
 ```
 
 ## Print
