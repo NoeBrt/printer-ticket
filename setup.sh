@@ -43,8 +43,8 @@ echo "ok: paired and trusted"
 
 step "Claude Code skill"
 if [[ -d "$HOME/.claude" ]]; then
-  mkdir -p "$HOME/.claude/skills" && cp -r "$HERE/skills/printer-ticket" "$HOME/.claude/skills/"
-  echo "ok: ~/.claude/skills/printer-ticket"
+  mkdir -p "$HOME/.claude/skills" && cp -r "$HERE/skills/mini-thermal-printer" "$HOME/.claude/skills/"
+  echo "ok: ~/.claude/skills/mini-thermal-printer"
 else
   echo "skipped: no ~/.claude (Claude Code not installed for this user)"
 fi

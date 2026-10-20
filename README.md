@@ -1,20 +1,24 @@
-# Printer Ticket Skill
+# Mini Thermal Printer Skill
 
-**A [Claude Code](https://claude.com/claude-code) skill for pocket thermal sticker printers.** Ask Claude to print a
-QR code, a label, a note or a photo, and it comes out of the printer. Ships with `print-ticket`, the Linux command the
-skill drives, which also works on its own and on a schedule.
+**A [Claude Code](https://claude.com/claude-code) skill for mini thermal printers**, the inkless 58 mm Bluetooth
+sticker printers also sold as pocket printers or "cat printers". Ask Claude to print a QR code, a label, a note or a
+photo, and it comes out of the printer. Ships with `print-ticket`, the Linux command the skill drives, which also
+works on its own and on a schedule.
+
+Built and tested on the **X6** (sold as Printel, Mafiti, Nadra…, app "Tiny Print"), which uses the same protocol as
+the **Core Innovations CTP-500**; see [supported printers](#supported-printers).
 
 <p align="center">
   <img src="examples/printer.jpg" width="420" alt="Pocket thermal printer with a QR sticker coming out">
   &nbsp;&nbsp;
   <img src="examples/qr-example.png" width="200" alt="QR sticker as rendered for the 384-dot head">
 </p>
-<p align="center"><sub>Left: illustration (generated image). Right: what <code>print-ticket --qr --caption printer-ticket</code> sends to the printer.</sub></p>
+<p align="center"><sub>Left: illustration (generated image). Right: what <code>print-ticket --qr --caption mini-thermal-printer</code> sends to the printer.</sub></p>
 
 ## In 10 seconds
 
 ```sh
-git clone https://github.com/NoeBrt/printer-ticket-skill ~/printer-ticket-skill && ~/printer-ticket-skill/setup.sh
+git clone https://github.com/NoeBrt/mini-thermal-printer-skill ~/mini-thermal-printer-skill && ~/mini-thermal-printer-skill/setup.sh
 ```
 
 Then, in Claude Code:
@@ -25,7 +29,7 @@ Then, in Claude Code:
 
 | | Feature | Command |
 |---|---|---|
-| ✅ | Claude Code skill: "print this QR", "imprime une étiquette", "print the date every morning" | `skills/printer-ticket` |
+| ✅ | Claude Code skill: "print this QR", "imprime une étiquette", "print the date every morning" | `skills/mini-thermal-printer` |
 | ✅ | One-shot setup: checks tools, installs TiMini Print, finds and pairs the printer, installs the skill, prints a test | `./setup.sh` |
 | ✅ | Health check: re-running setup skips what is done and reports the first broken step | `./setup.sh` |
 | ✅ | QR code from stdin, as large as the head allows, with a caption | `echo URL \| print-ticket --qr --caption TEXT` |
@@ -60,8 +64,8 @@ can print through a Linux machine over `ssh`.
 ### One command (recommended)
 
 ```sh
-git clone https://github.com/NoeBrt/printer-ticket-skill ~/printer-ticket-skill
-~/printer-ticket-skill/setup.sh
+git clone https://github.com/NoeBrt/mini-thermal-printer-skill ~/mini-thermal-printer-skill
+~/mini-thermal-printer-skill/setup.sh
 ```
 
 It installs the TiMini Print fork in `~/TiMini-Print`, links `print-ticket` into `~/.local/bin`, pairs the printer
@@ -73,15 +77,15 @@ again whenever printing stops working.
 When `print-ticket` is already installed on the machine, or on another machine Claude reaches over `ssh`:
 
 ```sh
-npx skills add NoeBrt/printer-ticket-skill                  # pick the agent interactively
-npx skills add NoeBrt/printer-ticket-skill -a claude-code -g
+npx skills add NoeBrt/mini-thermal-printer-skill                  # pick the agent interactively
+npx skills add NoeBrt/mini-thermal-printer-skill -a claude-code -g
 ```
 
 ### Manual
 
 ```sh
-git clone https://github.com/NoeBrt/printer-ticket-skill
-cp -r printer-ticket-skill/skills/printer-ticket ~/.claude/skills/
+git clone https://github.com/NoeBrt/mini-thermal-printer-skill
+cp -r mini-thermal-printer-skill/skills/mini-thermal-printer ~/.claude/skills/
 ```
 
 ### Settings
@@ -133,7 +137,7 @@ print-ticket schedule remove 2
 
 | Piece | Role |
 |---|---|
-| `skills/printer-ticket/SKILL.md` | The skill: when to trigger, how to print, schedules, secrets, troubleshooting. |
+| `skills/mini-thermal-printer/SKILL.md` | The skill: when to trigger, how to print, schedules, secrets, troubleshooting. |
 | `print-ticket` | Bash wrapper: printer name and model, dithering, QR and stdin handling, schedules, 180 s timeout. |
 | `render-qr.py` | QR code (ECC M) as large as the 384-dot head allows, with an optional caption. |
 | `setup.sh` | Install, pairing, skill and test print; re-runnable. |
